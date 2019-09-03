@@ -1,7 +1,7 @@
-module Ataka.Cereal.Put where
+module Most.Cereal.Put where
 
-import Ataka.Prelude
-import Ataka.Types
+import Most.Prelude
+import Most.Types
 import Data.Serialize.Put
 import qualified Data.ByteString as ByteString
 import qualified Data.Text.Encoding as Text

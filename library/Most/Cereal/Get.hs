@@ -1,7 +1,7 @@
-module Ataka.Cereal.Get where
+module Most.Cereal.Get where
 
-import Ataka.Prelude
-import Ataka.Types
+import Most.Prelude
+import Most.Types
 import Data.Serialize.Get
 import qualified Data.Text.Encoding as Text
 import qualified Data.Vector as Vector

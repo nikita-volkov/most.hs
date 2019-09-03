@@ -1,6 +1,6 @@
-module Ataka.Types where
+module Most.Types where
 
-import Ataka.Prelude
+import Most.Prelude
 
 
 -- * Response-request server versioning
