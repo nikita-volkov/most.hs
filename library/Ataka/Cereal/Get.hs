@@ -1,7 +1,7 @@
-module Biproco.Cereal.Get where
+module Ataka.Cereal.Get where
 
-import Biproco.Prelude
-import Biproco.Types
+import Ataka.Prelude
+import Ataka.Types
 import Data.Serialize.Get
 
 

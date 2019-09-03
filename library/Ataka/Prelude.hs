@@ -1,4 +1,4 @@
-module Biproco.Prelude
+module Ataka.Prelude
 ( 
   module Exports,
 )

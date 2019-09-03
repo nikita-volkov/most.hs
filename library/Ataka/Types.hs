@@ -1,6 +1,6 @@
-module Biproco.Types where
+module Ataka.Types where
 
-import Biproco.Prelude
+import Ataka.Prelude
 
 
 -- * Response-request server versioning

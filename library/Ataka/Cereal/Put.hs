@@ -1,7 +1,7 @@
-module Biproco.Cereal.Put where
+module Ataka.Cereal.Put where
 
-import Biproco.Prelude
-import Biproco.Types
+import Ataka.Prelude
+import Ataka.Types
 import Data.Serialize.Put
 import qualified Data.ByteString as ByteString
 import qualified Data.Text.Encoding as Text
