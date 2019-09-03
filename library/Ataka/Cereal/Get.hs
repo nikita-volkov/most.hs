@@ -4,6 +4,7 @@ import Ataka.Prelude
 import Ataka.Types
 import Data.Serialize.Get
 import qualified Data.Text.Encoding as Text
+import qualified Data.Vector as Vector
 
 
 versionedRequestDecoding :: Word32 -> Get request -> Get (VersionedRequestDecoding request)
@@ -39,3 +40,19 @@ maybe getA = do
     0 -> return Nothing
     1 -> Just <$> getA
     _ -> fail "Not a maybe"
+
+sum :: [Get a] -> Get a
+sum alternatives = let
+  !vector = Vector.fromList alternatives
+  in do
+    tag <- getWord8
+    case vector Vector.!? fromIntegral tag of
+      Just getA -> getA
+      Nothing -> fail ("Unsupported tag: " <> show tag)
+
+tagged :: (Word8 -> Maybe (Get a)) -> Get a
+tagged proj = do
+  tag <- getWord8
+  case proj tag of
+    Just getA -> getA
+    Nothing -> fail "Unsupported tag"
