@@ -2,8 +2,8 @@ name: ataka
 version: 0.1
 category: Networking, Serialization
 synopsis: Simple and compact binary data format
-homepage: https://github.com/nikita-volkov/ataka
-bug-reports: https://github.com/nikita-volkov/ataka/issues
+homepage: https://github.com/nikita-volkov/ataka.hs
+bug-reports: https://github.com/nikita-volkov/ataka.hs/issues
 author: Nikita Volkov <nikita.y.volkov@mail.ru>
 maintainer: Nikita Volkov <nikita.y.volkov@mail.ru>
 copyright: (c) 2019, Nikita Volkov
