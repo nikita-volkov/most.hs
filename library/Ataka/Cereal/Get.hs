@@ -41,18 +41,11 @@ maybe getA = do
     1 -> Just <$> getA
     _ -> fail "Not a maybe"
 
-sum :: [Get a] -> Get a
-sum alternatives = let
-  !vector = Vector.fromList alternatives
+tagged :: [Get a] -> Get a
+tagged scenarioList = let
+  !scenarioVec = Vector.fromList scenarioList
   in do
     tag <- getWord8
-    case vector Vector.!? fromIntegral tag of
+    case scenarioVec Vector.!? fromIntegral tag of
       Just getA -> getA
       Nothing -> fail ("Unsupported tag: " <> show tag)
-
-tagged :: (Word8 -> Maybe (Get a)) -> Get a
-tagged proj = do
-  tag <- getWord8
-  case proj tag of
-    Just getA -> getA
-    Nothing -> fail "Unsupported tag"
