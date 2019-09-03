@@ -23,3 +23,19 @@ text =
   getWord32le >>=
   getBytes . fromIntegral >>=
   either (fail . show) return . Text.decodeUtf8'
+
+bool :: Get Bool
+bool = do
+  tag <- getWord8
+  case tag of
+    0 -> return False
+    1 -> return True
+    _ -> fail "Out of bool range"
+
+maybe :: Get a -> Get (Maybe a)
+maybe getA = do
+  tag <- getWord8
+  case tag of
+    0 -> return Nothing
+    1 -> Just <$> getA
+    _ -> fail "Not a maybe"

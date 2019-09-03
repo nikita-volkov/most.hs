@@ -18,3 +18,13 @@ byteString x = putWord32le (fromIntegral (ByteString.length x)) <> putByteString
 
 text :: Text -> Put
 text = byteString . Text.encodeUtf8
+
+bool :: Bool -> Put
+bool = \ case
+  False -> putWord8 0
+  True -> putWord8 1
+
+maybe :: (a -> Put) -> Maybe a -> Put
+maybe putA = \ case
+  Nothing -> putWord8 0
+  Just a -> putWord8 1 <> putA a
