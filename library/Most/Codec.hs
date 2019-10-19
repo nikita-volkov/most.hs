@@ -30,6 +30,7 @@ module Most.Codec
   -- ** Containers
   foldable,
   intMap,
+  vector,
   -- ** Strings
   byteString,
   -- ** Time
@@ -45,6 +46,8 @@ import qualified Data.Serialize.Put as Put
 import qualified Data.ByteString as ByteString
 import qualified Data.Scientific as Scientific
 import qualified Data.IntMap.Strict as IntMap
+import qualified Data.Vector.Generic as Vec
+import qualified Data.Vector.Generic.Mutable as MVec
 import qualified DeferredFolds.Unfoldr as Unfoldr
 import qualified Most.Folds as Folds
 
@@ -284,27 +287,48 @@ varLengthInt = varLengthSignedIntegral
 -- * Containers
 -------------------------
 
-foldable :: (a -> Word64) -> (a -> Unfoldr b) -> Fold b a -> Codec b -> Codec a
-foldable length unfoldr (Fold step init extract) (Codec enc dec) = Codec
+foldable :: (a -> Word64) -> (a -> Unfoldr b) -> (Word64 -> Fold b a) -> Codec b -> Codec a
+foldable length unfoldr fold (Codec enc dec) = Codec
   (\ a -> do
     put varLengthWord64 (length a)
     forM_ (unfoldr a) enc
   )
   (do
     length <- get varLengthWord64
-    let
-      loop count !state = if count > 0
-        then do
-          b <- dec
-          loop (pred count) (step state b)
-        else return (extract state)
-      in loop length init
+    case fold length of
+      Fold step init extract -> let
+        loop count !state = if count > 0
+          then do
+            b <- dec
+            loop (pred count) (step state b)
+          else return (extract state)
+        in loop length init
   )
 
 intMap :: Codec Int -> Codec a -> Codec (IntMap a)
 intMap keyCodec valueCodec =
-  foldable (fromIntegral . IntMap.size) Unfoldr.intMapAssocs Folds.intMap
+  foldable (fromIntegral . IntMap.size) Unfoldr.intMapAssocs (const Folds.intMap)
     (product2 keyCodec valueCodec)
+
+vector :: Vec.Vector v a => Codec a -> Codec (v a)
+vector codec = Codec
+  (\ a -> do
+    put varLengthWord64 (fromIntegral (Vec.length a))
+    Vec.forM_ a (put codec)
+  )
+  (do
+      length <- fmap fromIntegral $ get varLengthWord64
+      let
+        !mvec = unsafeDupablePerformIO (MVec.unsafeNew length)
+        loop index = if index < length
+          then do
+            a <- get codec
+            unsafeDupablePerformIO $ do
+              MVec.unsafeWrite mvec index a
+              return (loop (succ index))
+          else return (unsafeDupablePerformIO (Vec.unsafeFreeze mvec))
+        in loop 0
+  )
 
 
 -- * Time

@@ -14,6 +14,8 @@ import qualified Data.ByteString as ByteString
 
 main = defaultMain $ testGroup "" $
   [
+    testCodec "vector" (Most.Codec.vector @Vector word8)
+    ,
     testCodec "utcTime" utcTime
     ,
     testCodec "byteString" byteString
