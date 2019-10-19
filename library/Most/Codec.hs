@@ -5,9 +5,12 @@ import qualified Data.Serialize.Get as Get
 import qualified Data.Serialize.Put as Put
 import qualified Data.ByteString as ByteString
 import qualified Data.Scientific as Scientific
+import qualified Data.IntMap.Strict as IntMap
+import qualified DeferredFolds.Unfoldr as Unfoldr
+import qualified Most.Folds as Folds
 
 
-data Codec a = Codec (a -> Put.Put) (Get.Get a)
+data Codec a = Codec { put :: a -> Put.Put, get :: Get.Get a }
 
 instance Invariant Codec where
   invmap fn1 fn2 (Codec enc dec) = Codec (enc . fn2) (fmap fn1 dec)
@@ -162,3 +165,32 @@ varLengthWord64 = varLengthUnsignedIntegral
 
 int8 :: Codec Int8
 int8 = Codec Put.putInt8 Get.getInt8
+
+varLengthInt :: Codec Int
+varLengthInt = varLengthSignedIntegral
+
+
+-- * Containers
+-------------------------
+
+foldable :: (a -> Word64) -> (a -> Unfoldr b) -> Fold b a -> Codec b -> Codec a
+foldable length unfoldr (Fold step init extract) (Codec enc dec) = Codec
+  (\ a -> do
+    put varLengthWord64 (length a)
+    forM_ (unfoldr a) enc
+  )
+  (do
+    length <- get varLengthWord64
+    let
+      loop count !state = if count > 0
+        then do
+          b <- dec
+          loop (pred count) (step state b)
+        else return (extract state)
+      in loop length init
+  )
+
+intMap :: Codec a -> Codec (IntMap a)
+intMap valueCodec =
+  foldable (fromIntegral . IntMap.size) Unfoldr.intMapAssocs Folds.intMap
+    (product2 varLengthInt valueCodec)

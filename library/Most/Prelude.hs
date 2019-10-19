@@ -87,3 +87,19 @@ import Data.Scientific as Exports (Scientific)
 -- invariant
 -------------------------
 import Data.Functor.Invariant as Exports
+
+-- foldl
+-------------------------
+import Control.Foldl as Exports (Fold(..), FoldM(..))
+
+-- deferred-folds
+-------------------------
+import DeferredFolds.Unfoldr as Exports (Unfoldr(..))
+
+-- containers
+-------------------------
+import Data.IntMap.Strict as Exports (IntMap)
+import Data.IntSet as Exports (IntSet)
+import Data.Map.Strict as Exports (Map)
+import Data.Sequence as Exports (Seq)
+import Data.Set as Exports (Set)
