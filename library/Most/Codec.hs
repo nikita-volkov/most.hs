@@ -125,6 +125,9 @@ sum5 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) (Codec enc4 dec4) (Co
       _ -> fail "Unexpected tag"
   )
 
+none :: Codec ()
+none = Codec (const mempty) (pure ())
+
 scientific :: Codec Scientific
 scientific = 
   invmap
