@@ -40,6 +40,21 @@ product2 (Codec enc1 dec1) (Codec enc2 dec2) = Codec
   (\ (a, b) -> enc1 a *> enc2 b)
   (liftA2 (,) dec1 dec2)
 
+product3 :: Codec a -> Codec b -> Codec c -> Codec (a, b, c)
+product3 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) = Codec
+  (\ (a, b, c) -> enc1 a *> enc2 b *> enc3 c)
+  ((,,) <$> dec1 <*> dec2 <*> dec3)
+
+product4 :: Codec a -> Codec b -> Codec c -> Codec d -> Codec (a, b, c, d)
+product4 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) (Codec enc4 dec4) = Codec
+  (\ (a, b, c, d) -> enc1 a *> enc2 b *> enc3 c *> enc4 d)
+  ((,,,) <$> dec1 <*> dec2 <*> dec3 <*> dec4)
+
+product5 :: Codec a -> Codec b -> Codec c -> Codec d -> Codec e -> Codec (a, b, c, d, e)
+product5 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) (Codec enc4 dec4) (Codec enc5 dec5) = Codec
+  (\ (a, b, c, d, e) -> enc1 a *> enc2 b *> enc3 c *> enc4 d *> enc5 e)
+  ((,,,,) <$> dec1 <*> dec2 <*> dec3 <*> dec4 <*> dec5)
+
 sum2 :: Codec a -> Codec b -> Codec (Either a b)
 sum2 (Codec enc1 dec1) (Codec enc2 dec2) = Codec
   (\ case
