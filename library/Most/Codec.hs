@@ -82,14 +82,6 @@ scientific =
 Variable length representation of unsigned integers.
 
 Uses the 8th bit of each octet to specify, whether another octet is needed.
--}
-varLengthWord :: Codec Word
-varLengthWord = varLengthUnsignedIntegral
-
-{-|
-Variable length representation of unsigned integers.
-
-Uses the 8th bit of each octet to specify, whether another octet is needed.
 
 __Warning:__
 It is your responsibility to ensure that the value is non-negative,
@@ -177,6 +169,14 @@ word64 = Codec Put.putWord64be Get.getWord64be
 
 varLengthWord64 :: Codec Word64
 varLengthWord64 = varLengthUnsignedIntegral
+
+{-|
+Variable length representation of unsigned integers.
+
+Uses the 8th bit of each octet to specify, whether another octet is needed.
+-}
+varLengthWord :: Codec Word
+varLengthWord = varLengthUnsignedIntegral
 
 int8 :: Codec Int8
 int8 = Codec Put.putInt8 Get.getInt8
