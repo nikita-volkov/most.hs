@@ -31,6 +31,10 @@ module Most.Codec
   intMap,
   -- ** Strings
   byteString,
+  -- ** Time
+  utcTime,
+  diffTime,
+  day,
 )
 where
 
@@ -297,3 +301,20 @@ intMap :: Codec Int -> Codec a -> Codec (IntMap a)
 intMap keyCodec valueCodec =
   foldable (fromIntegral . IntMap.size) Unfoldr.intMapAssocs Folds.intMap
     (product2 keyCodec valueCodec)
+
+
+-- * Time
+-------------------------
+
+utcTime :: Codec UTCTime
+utcTime =
+  invmap
+    (\ (a, b) -> UTCTime a b)
+    (\ (UTCTime a b) -> (a, b))
+    (product2 day diffTime)
+
+diffTime :: Codec DiffTime
+diffTime = invmap picosecondsToDiffTime diffTimeToPicoseconds integer
+
+day :: Codec Day
+day = invmap ModifiedJulianDay toModifiedJulianDay integer

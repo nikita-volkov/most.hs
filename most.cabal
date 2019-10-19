@@ -40,6 +40,7 @@ library
     invariant >=0.5.3 && <0.6,
     scientific >=0.3.6.2 && <0.4,
     text >=1.2.4 && <2,
+    time >=1.8 && <2,
     vector >=0.12 && <0.13
 
 test-suite test

@@ -14,6 +14,8 @@ import qualified Data.ByteString as ByteString
 
 main = defaultMain $ testGroup "" $
   [
+    testCodec "utcTime" utcTime
+    ,
     testCodec "byteString" byteString
     ,
     testCodec "intMap" (intMap varLengthInt word8)
