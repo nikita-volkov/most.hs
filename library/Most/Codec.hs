@@ -205,7 +205,7 @@ foldable length unfoldr (Fold step init extract) (Codec enc dec) = Codec
       in loop length init
   )
 
-intMap :: Codec a -> Codec (IntMap a)
-intMap valueCodec =
+intMap :: Codec Int -> Codec a -> Codec (IntMap a)
+intMap keyCodec valueCodec =
   foldable (fromIntegral . IntMap.size) Unfoldr.intMapAssocs Folds.intMap
-    (product2 varLengthInt valueCodec)
+    (product2 keyCodec valueCodec)

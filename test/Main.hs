@@ -14,7 +14,7 @@ import qualified Data.ByteString as ByteString
 
 main = defaultMain $ testGroup "" $
   [
-    testCodec "IntMap" (intMap word8)
+    testCodec "IntMap" (intMap varLengthSignedIntegral word8)
     ,
     testCodec "Scientific" scientific
     ,
