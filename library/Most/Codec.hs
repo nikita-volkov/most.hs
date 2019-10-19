@@ -23,6 +23,7 @@ module Most.Codec
   int8,
   -- *** Var-length
   integer,
+  varLengthWord16,
   varLengthWord64,
   varLengthWord,
   varLengthInt,
@@ -258,6 +259,9 @@ word8 = Codec Put.putWord8 Get.getWord8
 
 word64 :: Codec Word64
 word64 = Codec Put.putWord64be Get.getWord64be
+
+varLengthWord16 :: Codec Word16
+varLengthWord16 = varLengthUnsignedIntegral
 
 varLengthWord64 :: Codec Word64
 varLengthWord64 = varLengthUnsignedIntegral
