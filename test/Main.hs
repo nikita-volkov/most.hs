@@ -14,62 +14,21 @@ import qualified Data.ByteString as ByteString
 
 main = defaultMain $ testGroup "" $
   [
-    testCodec "ByteString" byteString
+    testCodec "byteString" byteString
     ,
-    testCodec "IntMap" (intMap varLengthSignedIntegral word8)
+    testCodec "intMap" (intMap varLengthInt word8)
     ,
-    testCodec "Scientific" scientific
+    testCodec "scientific" scientific
     ,
-    testGroup "varLengthUnsignedIntegral"
-      [
-        testCodec @Word8 "Word8" varLengthUnsignedIntegral
-        ,
-        testCodec @Word16 "Word16" varLengthUnsignedIntegral
-        ,
-        testCodec @Word32 "Word32" varLengthUnsignedIntegral
-        ,
-        testCodec @Word64 "Word64" varLengthUnsignedIntegral
-        ,
-        testCodec @Word "Word" varLengthUnsignedIntegral
-      ]
+    testCodec "word8" word8
     ,
-    testGroup "varLengthSignedIntegral"
-      [
-        testGroup "Explicit Int8"
-          (fmap
-            (\ (a :: Int8) -> testCase (show a) $ let
-              encoded = encode varLengthSignedIntegral a
-              decoded = decode varLengthSignedIntegral encoded
-              in assertEqual (showBits encoded) (Right a) decoded)
-            [
-              0,
-              maxBound,
-              minBound
-            ]
-          )
-        ,
-        testCodec @Word8 "Word8" varLengthSignedIntegral
-        ,
-        testCodec @Word16 "Word16" varLengthSignedIntegral
-        ,
-        testCodec @Word32 "Word32" varLengthSignedIntegral
-        ,
-        testCodec @Word64 "Word64" varLengthSignedIntegral
-        ,
-        testCodec @Word "Word" varLengthSignedIntegral
-        ,
-        testCodec @Int8 "Int8" varLengthSignedIntegral
-        ,
-        testCodec @Int16 "Int16" varLengthSignedIntegral
-        ,
-        testCodec @Int32 "Int32" varLengthSignedIntegral
-        ,
-        testCodec @Int64 "Int64" varLengthSignedIntegral
-        ,
-        testCodec @Int "Int" varLengthSignedIntegral
-        ,
-        testCodec @Integer "Integer" varLengthSignedIntegral
-      ]
+    testCodec "varLengthWord64" varLengthWord64
+    ,
+    testCodec "varLengthWord" varLengthWord
+    ,
+    testCodec "varLengthInt" varLengthInt
+    ,
+    testCodec "integer" integer
   ]
 
 testCodec :: (Arbitrary a, Show a, Eq a) => TestName -> Codec a -> TestTree

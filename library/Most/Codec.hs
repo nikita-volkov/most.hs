@@ -1,4 +1,38 @@
-module Most.Codec where
+module Most.Codec
+(
+  -- * Execution
+  encode,
+  decode,
+  -- * Codecs
+  Codec,
+  none,
+  -- ** Products
+  product2,
+  product3,
+  product4,
+  product5,
+  -- ** Sums
+  sum2,
+  sum3,
+  sum4,
+  sum5,
+  -- ** Numbers
+  scientific,
+  word8,
+  word64,
+  int8,
+  -- *** Var-length
+  integer,
+  varLengthWord64,
+  varLengthWord,
+  varLengthInt,
+  -- ** Containers
+  foldable,
+  intMap,
+  -- ** Strings
+  byteString,
+)
+where
 
 import Most.Prelude
 import qualified Data.Serialize.Get as Get
