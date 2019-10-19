@@ -71,6 +71,60 @@ sum2 (Codec enc1 dec1) (Codec enc2 dec2) = Codec
       _ -> fail "Unexpected tag"
   )
 
+sum3 :: Codec a -> Codec b -> Codec c -> Codec (Either a (Either b c))
+sum3 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) = Codec
+  (\ case
+    Left a -> Put.putWord8 0 *> enc1 a
+    Right (Left a) -> Put.putWord8 1 *> enc2 a
+    Right (Right a) -> Put.putWord8 2 *> enc3 a
+  )
+  (do
+    tag <- Get.getWord8
+    case tag of
+      0 -> fmap Left dec1
+      1 -> fmap (Right . Left) dec2
+      2 -> fmap (Right . Right) dec3
+      _ -> fail "Unexpected tag"
+  )
+
+sum4 :: Codec a -> Codec b -> Codec c -> Codec d -> Codec (Either a (Either b (Either c d)))
+sum4 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) (Codec enc4 dec4) = Codec
+  (\ case
+    Left a -> Put.putWord8 0 *> enc1 a
+    Right (Left a) -> Put.putWord8 1 *> enc2 a
+    Right (Right (Left a)) -> Put.putWord8 2 *> enc3 a
+    Right (Right (Right a)) -> Put.putWord8 3 *> enc4 a
+  )
+  (do
+    tag <- Get.getWord8
+    case tag of
+      0 -> fmap Left dec1
+      1 -> fmap (Right . Left) dec2
+      2 -> fmap (Right . Right . Left) dec3
+      3 -> fmap (Right . Right . Right) dec4
+      _ -> fail "Unexpected tag"
+  )
+
+sum5 :: Codec a -> Codec b -> Codec c -> Codec d -> Codec e -> Codec (Either a (Either b (Either c (Either d e))))
+sum5 (Codec enc1 dec1) (Codec enc2 dec2) (Codec enc3 dec3) (Codec enc4 dec4) (Codec enc5 dec5) = Codec
+  (\ case
+    Left a -> Put.putWord8 0 *> enc1 a
+    Right (Left a) -> Put.putWord8 1 *> enc2 a
+    Right (Right (Left a)) -> Put.putWord8 2 *> enc3 a
+    Right (Right (Right (Left a))) -> Put.putWord8 3 *> enc4 a
+    Right (Right (Right (Right a))) -> Put.putWord8 4 *> enc5 a
+  )
+  (do
+    tag <- Get.getWord8
+    case tag of
+      0 -> fmap Left dec1
+      1 -> fmap (Right . Left) dec2
+      2 -> fmap (Right . Right . Left) dec3
+      3 -> fmap (Right . Right . Right . Left) dec4
+      4 -> fmap (Right . Right . Right . Right) dec5
+      _ -> fail "Unexpected tag"
+  )
+
 scientific :: Codec Scientific
 scientific = 
   invmap
