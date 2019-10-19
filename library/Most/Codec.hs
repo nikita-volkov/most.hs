@@ -21,17 +21,14 @@ encode (Codec enc _) = Put.runPut . enc
 decode :: Codec a -> ByteString -> Either String a
 decode (Codec _ dec) = Get.runGet dec
 
-{-|
-ByteString of length lesser than 2^32.
--}
 byteString :: Codec ByteString
 byteString = Codec
-  (\ a ->
-    Put.putWord32be (fromIntegral (ByteString.length a)) <>
+  (\ a -> do
+    put varLengthWord64 (fromIntegral (ByteString.length a))
     Put.putByteString a
   )
   (do
-    length <- Get.getWord32be
+    length <- get varLengthWord64
     Get.getBytes (fromIntegral length)
   )
 
