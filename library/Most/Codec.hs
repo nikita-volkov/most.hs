@@ -36,7 +36,7 @@ module Most.Codec
   -- ** Time
   timestamp,
   utcTime,
-  utcTimeMicros,
+  utcTimeInMicros,
   diffTime,
   day,
 )
@@ -350,8 +350,8 @@ utcTime =
     (\ (UTCTime a b) -> (a, b))
     (product2 day diffTime)
 
-utcTimeMicros :: Codec UTCTime
-utcTimeMicros = invmap Timestamp.timestampUtcTime Timestamp.utcTimeTimestamp timestamp
+utcTimeInMicros :: Codec UTCTime
+utcTimeInMicros = invmap Timestamp.timestampUtcTime Timestamp.utcTimeTimestamp timestamp
 
 diffTime :: Codec DiffTime
 diffTime = invmap picosecondsToDiffTime diffTimeToPicoseconds integer
