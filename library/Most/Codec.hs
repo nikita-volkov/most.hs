@@ -34,7 +34,9 @@ module Most.Codec
   -- ** Strings
   byteString,
   -- ** Time
+  timestamp,
   utcTime,
+  utcTimeMicros,
   diffTime,
   day,
 )
@@ -50,6 +52,7 @@ import qualified Data.Vector.Generic as Vec
 import qualified Data.Vector.Generic.Mutable as MVec
 import qualified DeferredFolds.Unfoldr as Unfoldr
 import qualified Most.Folds as Folds
+import qualified Timestamp
 
 
 data Codec a = Codec { put :: a -> Put.Put, get :: Get.Get a }
@@ -263,6 +266,9 @@ word8 = Codec Put.putWord8 Get.getWord8
 word64 :: Codec Word64
 word64 = Codec Put.putWord64be Get.getWord64be
 
+int64 :: Codec Int64
+int64 = Codec Put.putInt64be Get.getInt64be
+
 varLengthWord16 :: Codec Word16
 varLengthWord16 = varLengthUnsignedIntegral
 
@@ -334,12 +340,18 @@ vector codec = Codec
 -- * Time
 -------------------------
 
+timestamp :: Codec Timestamp
+timestamp = invmap coerce coerce int64
+
 utcTime :: Codec UTCTime
 utcTime =
   invmap
     (\ (a, b) -> UTCTime a b)
     (\ (UTCTime a b) -> (a, b))
     (product2 day diffTime)
+
+utcTimeMicros :: Codec UTCTime
+utcTimeMicros = invmap Timestamp.timestampUtcTime Timestamp.utcTimeTimestamp timestamp
 
 diffTime :: Codec DiffTime
 diffTime = invmap picosecondsToDiffTime diffTimeToPicoseconds integer

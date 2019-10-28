@@ -107,3 +107,7 @@ import Data.Set as Exports (Set)
 -- time
 -------------------------
 import Data.Time as Exports
+
+-- timestamp
+-------------------------
+import Timestamp as Exports (Timestamp)
