@@ -289,6 +289,9 @@ int8 = Codec Put.putInt8 Get.getInt8
 varLengthInt :: Codec Int
 varLengthInt = varLengthSignedIntegral
 
+uuid :: Codec UUID
+uuid = error "TODO"
+
 
 -- * Containers
 -------------------------

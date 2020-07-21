@@ -111,3 +111,11 @@ import Data.Time as Exports
 -- timestamp
 -------------------------
 import Timestamp as Exports (Timestamp)
+
+-- uuid
+-------------------------
+import Data.UUID as Exports (UUID)
+
+-- data-dword
+-------------------------
+import Data.DoubleWord as Exports (Word96(..), Word128(..), Word160(..), Word192(..), Word224(..), Word256(..))
