@@ -4,7 +4,7 @@ module Most.Codec
     decode,
 
     -- * Codecs
-    Codec,
+    Codec (..),
     none,
 
     -- ** Products
