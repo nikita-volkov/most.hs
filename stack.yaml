@@ -1,0 +1,4 @@
+resolver: nightly-2021-11-19
+extra-deps:
+  - cereal-data-dword-0.1.1
+  - timestamp-0.2
