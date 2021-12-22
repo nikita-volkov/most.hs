@@ -31,6 +31,8 @@ module Most.Codec
     varLengthWord64,
     varLengthWord,
     varLengthInt,
+    varLengthUnsignedIntegral,
+    varLengthSignedIntegral,
 
     -- ** Containers
     foldable,
